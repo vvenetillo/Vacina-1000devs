@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Vacinação</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto; 
+        }
+
+        .main-content {
+            margin-left: 250px; 
+            padding: 20px;
+            width: calc(100% - 250px); 
+            overflow-y: auto; 
+        }
+
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body class="d-flex">
+    <!-- Sidebar -->
+    <aside class="bg-primary text-white p-3 d-flex flex-column sidebar">
+        <h4 class="text-center">Menu</h4>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="pages/home/index.html" class="nav-link text-white" target="conteudo">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="pages/pacientes/index.html" class="nav-link text-white" target="conteudo">Cadastro de Pacientes</a>
+            </li>
+            <li class="nav-item">
+                <a href="pages/listar-pacientes/index.html" class="nav-link text-white" target="conteudo">Lista de Pacientes</a>
+            </li>
+            <li class="nav-item">
+                <a href="pages/vacinas/index.html" class="nav-link text-white" target="conteudo">Cadastro de Vacinas</a>
+            </li>
+            <li class="nav-item">
+                <a href="pages/imunizacoes/index.html" class="nav-link text-white" target="conteudo">Imunizações</a>
+            </li>
+            <li class="nav-item">
+                <a href="pages/doses/index.html" class="nav-link text-white" target="conteudo">Doses</a>
+            </li>
+        </ul>
+    </aside>
+    
+    <!-- Conteúdo dashboard-->
+    <div class="main-content" style="display: flex;">
+        <iframe name="conteudo" src="pages/home/index.html" style=" justify-content: center; align-items: center;"></iframe>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
