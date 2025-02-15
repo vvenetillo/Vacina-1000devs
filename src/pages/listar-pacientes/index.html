@@ -16,23 +16,25 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const lista = document.getElementById("pacientes");
-            const paciente = JSON.parse(localStorage.getItem("paciente"));
+            const pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
             
-            if (paciente) {
+            pacientes.forEach((paciente, index) => {
                 const item = document.createElement("li");
                 item.className = "list-group-item d-flex justify-content-between align-items-center";
                 item.innerHTML = `
                    Nome: ${paciente.nome} </br> Idade: ${paciente.idade} anos </br> CPF: ${paciente.cpf}
                     <div>
-                        <button class="btn btn-danger btn-sm" onclick="excluirPaciente()">Excluir</button>
+                        <button class="btn btn-danger btn-sm" onclick="excluirPaciente(${index})">Excluir</button>
                     </div>
                 `;
                 lista.appendChild(item);
-            }
+            });
         });
 
-        function excluirPaciente() {
-            localStorage.removeItem("paciente");
+        function excluirPaciente(index) {
+            let pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
+            pacientes.splice(index, 1);
+            localStorage.setItem("pacientes", JSON.stringify(pacientes));
             location.reload();
         }
     </script>
