@@ -7,9 +7,9 @@
     <title>Cadastro de Pacientes</title>
 </head>
 <body>
-    <section id="cadastroPacientes">
+    <section id="cadastroPacientes" class="container mt-4">
         <h2 class="text-center text-primary mb-4">Cadastro de Pacientes</h2>
-        <form id="formPaciente" class="p-4 shadow rounded bg-light">
+        <form id="formPaciente" class="p-4 shadow rounded bg-light" method="post">
             <div class="mb-3">
                 <label for="id" class="form-label">ID</label>
                 <input type="text" class="form-control" id="id" disabled>
@@ -45,8 +45,8 @@
 
     <script>
         document.getElementById("formPaciente").addEventListener("submit", function(event) {
-            event.preventDefault(); 
-
+            event.preventDefault();
+            
             const paciente = {
                 id: document.getElementById("id").value,
                 nome: document.getElementById("nome").value,
@@ -55,10 +55,9 @@
                 sexo: document.getElementById("sexo").value,
                 dataNascimento: document.getElementById("dataNascimento").value
             };
-
-            console.log("Paciente cadastrado:", paciente);
-
-            document.getElementById("formPaciente").reset();
+            
+            localStorage.setItem("paciente", JSON.stringify(paciente));
+            window.location.href = "../listar-pacientes/index.html";
         });
     </script>
 </body>
