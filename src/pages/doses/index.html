@@ -9,47 +9,61 @@
             text-align: center;
             background-color: #fff;
         }
+        table{
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th,td{
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+        th{
+            background-color: #ddd;
+        }
     </style>
 </head>
 <body>
-    <section id="doses" class="d-none">
+    <section id="tabela-imunizacao" class="d-none">
         <h2 class="text-center text-primary mb-4">Doses</h2>
         <p class="text-center">Controle de doses aplicadas.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Vacina</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-imunizacao">
+
+            </tbody>
+        </table>
     </section>
     <script>
-        const mysql = require('mysql2');
-    
-    // Configuração da conexão com o banco de dados
-    const connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'seu_usuario',
-      password: 'sua_senha',
-      database: 'sua_base'
-    });
-    
-    // Conecta ao banco de dados
-    connection.connect((err) => {
-      if (err) {
-        console.error('Erro ao conectar ao banco de dados:', err);
-        return;
-      }
-      console.log('Conectado ao banco de dados com sucesso!');
-    });
-    
-    // Realiza o SELECT e exibe os resultados no console
-    const query = 'SELECT * FROM imunizacao';
-    connection.query(query, (err, results) => {
-      if (err) {
-        console.error('Erro ao executar o SELECT:', err);
-        return;
-      }
-    
-      // Imprime os resultados no console
-      console.log('Resultados do SELECT:', results);
-    });
-    
-    // Encerra a conexão
-    connection.end();
-      </script>
+        async function carregarDoses(params) {
+        try{
+            const reponse = await fetch("http://localhost:3000/imunizacao");
+            if(!reponse.ok){
+                throw new Error("Erro ao buscar doses");
+            }
+
+            const doses = await response.json();
+            let tabela = document.getElementById("tabela-imunizacao");
+            tabela.innerHTML ="";//Limpa antes de inserir os dados
+            doses.forEach(dose => {
+                let row = `<tr>
+                        <td>${dose.id}</td>
+                        <td>${dose.vacinanome}</td>
+                    </tr>`;
+                    tabela.innerHTML += row;
+                });
+
+            } catch (error) {
+                console.error("Erro ao carregar doses:", error);
+        }
+        }
+        window.onload = carregarDoses;
+    </script>
 </body>
 </html>
