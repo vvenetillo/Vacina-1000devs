@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,7 @@
     <title>Dashboard</title>
 </head>
 <body>
-     <div class="container p-4 shadow-lg rounded bg-white flex-grow-1">
+    <div class="container p-4 shadow-lg rounded bg-white">
         <section id="home" class="text-center my-5">
             <h2 class="text-primary mb-4">Dashboard</h2>
             <div class="row justify-content-center">
@@ -28,17 +28,30 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
-            const vacinas = JSON.parse(localStorage.getItem("vacinas")) || [];
-            const imunizacoes = JSON.parse(localStorage.getItem("imunizacoes")) || [];
-            const doses = JSON.parse(localStorage.getItem("doses")) || [];
+        const API_URL = "http://localhost:4567"; 
 
-            document.getElementById("contagemPacientes").textContent = pacientes.length;
-            document.getElementById("contagemVacinas").textContent = vacinas.length;
-            document.getElementById("contagemImunizacoes").textContent = imunizacoes.length;
-            document.getElementById("contagemDoses").textContent = doses.length;
-        });
+        async function carregarDados() {
+            try {
+
+                const [pacientes, vacinas, imunizacoes, doses] = await Promise.all([
+                    fetch(`${API_URL}/pacientes`).then(res => res.json()),
+                    fetch(`${API_URL}/vacinas`).then(res => res.json()),
+                    fetch(`${API_URL}/imunizacoes`).then(res => res.json()),
+                    fetch(`${API_URL}/doses`).then(res => res.json()),
+                ]);
+
+               
+                document.getElementById("contagemPacientes").textContent = pacientes.length || 0;
+                document.getElementById("contagemVacinas").textContent = vacinas.length || 0;
+                document.getElementById("contagemImunizacoes").textContent = imunizacoes.length || 0;
+                document.getElementById("contagemDoses").textContent = doses.length || 0;
+            } catch (error) {
+                console.error("Erro ao buscar os dados:", error);
+                alert("Erro ao carregar os dados do dashboard.");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", carregarDados);
     </script>
 </body>
 </html>
