@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Vacinas</title>
+
+<body>
+    <h1>Registro de Doses de Vacinas</h1>
+    <form id="vacinaForm">
+        <label for="nomeVacina">Nome da vacina:</label>
+        <input type="text" id="nomeVacina" required><br><br>
+        <label for="doseAplicada">Dose aplicada:</label>
+        <input type="text" id="doseAplicada" required><br><br>
+        <label for="dataAplicacao">Data de aplicação:</label>
+        <input type="date" id="dataAplicacao" required><br><br>
+        <button type="submit">Registrar Dose</button>
+    </form>
+
+    <div class="vacina-lista" id="vacinaLista"></div>
+
+    <script src="controlevacinas.js"></script>
+</body>
+</html>
