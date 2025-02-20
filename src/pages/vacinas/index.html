@@ -45,84 +45,105 @@
         background: #218838;
     }
 </style>
-</head>
 <body>
 
 <div class="container">
-<h2>Cadastro de Vacina</h2>
-<form id="formVacina">
-    <label for="vacina">Selecione uma Vacina:</label>
-    <select id="vacina" name="vacina">
-        <option value="">-- Selecione --</option>
-        <option value="1" data-desc="Proteção contra tuberculose grave" data-idade="60">BCG</option>
-        <option value="2" data-desc="Proteção contra Hepatite B" data-idade="">Hepatite B</option>
-        <option value="3" data-desc="Proteção contra Poliomielite" data-idade="">Poliomielite 1, 2 e 3</option>
-        <option value="4" data-desc="Proteção contra rotavírus" data-idade="9">Rotavírus</option>
-        <option value="5" data-desc="Proteção contra difteria, tétano, coqueluche e hepatite B" data-idade="84">Pentavalente</option>
-        <option value="6" data-desc="Proteção contra pneumonia e meningite" data-idade="60">Pneumocócica 10</option>
-        <option value="7" data-desc="Proteção contra meningite C" data-idade="60">Meningocócica C</option>
-        <option value="8" data-desc="Proteção contra COVID-19" data-idade="60">COVID-19</option>
-        <option value="9" data-desc="Proteção contra febre amarela" data-idade="">Febre Amarela</option>
-        <option value="10" data-desc="Proteção contra sarampo, caxumba e rubéola" data-idade="72">Tríplice Viral</option>
-        <option value="11" data-desc="Proteção contra sarampo, caxumba, rubéola e varicela" data-idade="84">Tetraviral</option>
-        <option value="12" data-desc="Proteção contra Hepatite A" data-idade="60">Hepatite A</option>
-        <option value="13" data-desc="Proteção contra difteria, tétano e coqueluche" data-idade="84">DTP</option>
-        <option value="14" data-desc="Proteção contra HPV" data-idade="180">HPV4</option>
-        <option value="15" data-desc="Proteção contra meningite bacteriana e pneumonia" data-idade="">Pneumocócica 23</option>
-        <option value="16" data-desc="Proteção contra catapora" data-idade="156">Varicela</option>
-    </select>
+    <h2>Cadastro de Vacina</h2>
+    <form id="formVacina">
+        <label for="vacina">Selecione uma Vacina:</label>
+        <select id="vacina" name="vacina">
+            <option value="">-- Selecione --</option>
+        </select>
 
-    <label for="descricao">Descrição:</label>
-    <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição da vacina"></textarea>
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição da vacina"></textarea>
 
-    <label for="idade">Idade Mínima Recomendada (meses):</label>
-    <input type="number" id="idade" name="idade" placeholder="Digite a idade mínima">
+        <label for="idade">Idade Mínima Recomendada (meses):</label>
+        <input type="number" id="idade" name="idade" placeholder="Digite a idade mínima">
 
-    <label for="categoria">Categoria:</label>
-    <select id="categoria" name="categoria">
-        <option value="CRIANÇA">Criança</option>
-        <option value="ADOLESCENTE">Adolescente</option>
-        <option value="ADULTO">Adulto</option>
-        <option value="GESTANTE">Gestante</option>
-    </select>
+        <label for="categoria">Categoria:</label>
+        <select id="categoria" name="categoria">
+            <option value="CRIANÇA">Criança</option>
+        </select>
 
-    <button type="submit">Cadastrar</button>
-</form>
+        <button type="submit">Cadastrar</button>
+    </form>
 </div>
-</body>
+
 <script>
-// Preenchimento automático ao selecionar uma vacina
+
+const API_URL = "http://localhost:4567"; 
+
+async function carregarVacinas() {
+    try {
+        let response = await fetch(`${API_URL}/vacinas`);
+        if (!response.ok) throw new Error("Erro ao buscar vacinas");
+
+        let vacinas = await response.json();
+        let selectVacina = document.getElementById("vacina");
+
+        vacinas.forEach(vacina => {
+            let option = document.createElement("option");
+            option.value = vacina.id;
+            option.textContent = vacina.nome;
+            option.dataset.desc = vacina.descricao;
+            option.dataset.idade = vacina.idadeMinima || "";
+            selectVacina.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Erro ao carregar vacinas:", error);
+        alert("Erro ao carregar vacinas do banco de dados.");
+    }
+}
+
+
 document.getElementById("vacina").addEventListener("change", function() {
     let selectedOption = this.options[this.selectedIndex];
-    let descricao = selectedOption.getAttribute("data-desc");
-    let idade = selectedOption.getAttribute("data-idade");
-
-    document.getElementById("descricao").value = descricao || "";
-    document.getElementById("idade").value = idade || "";
+    document.getElementById("descricao").value = selectedOption.dataset.desc || "";
+    document.getElementById("idade").value = selectedOption.dataset.idade || "";
 });
 
-// Capturar e exibir os dados cadastrados (simulação de envio)
-document.getElementById("formVacina").addEventListener("submit", function(event) {
+
+document.getElementById("formVacina").addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    let vacinaSelecionada = document.getElementById("vacina");
-    let vacinaNome = vacinaSelecionada.options[vacinaSelecionada.selectedIndex].text;
+    let vacinaId = document.getElementById("vacina").value;
     let descricao = document.getElementById("descricao").value;
     let idade = document.getElementById("idade").value;
     let categoria = document.getElementById("categoria").value;
 
-    if (!vacinaNome || vacinaNome === "-- Selecione --") {
+    if (!vacinaId) {
         alert("Por favor, selecione uma vacina.");
         return;
     }
 
-    alert("✅ Vacina cadastrada com sucesso!\n\n" +
-          "🔹 Nome: " + vacinaNome + "\n" +
-          "🔹 Descrição: " + descricao + "\n" +
-          "🔹 Idade Mínima: " + (idade ? idade + " meses" : "Não especificada") + "\n" +
-          "🔹 Categoria: " + categoria);
+    let vacinaData = {
+        vacinaId,
+        descricao,
+        idade: idade || null,
+        categoria
+    };
+
+    try {
+        let response = await fetch(`${API_URL}/vacinas/cadastrar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(vacinaData)
+        });
+
+        if (!response.ok) throw new Error("Erro ao cadastrar vacina");
+
+        alert("✅ Vacina cadastrada com sucesso!");
+        document.getElementById("formVacina").reset();
+    } catch (error) {
+        console.error("Erro ao cadastrar vacina:", error);
+        alert("Erro ao cadastrar vacina.");
+    }
 });
+
+
+document.addEventListener("DOMContentLoaded", carregarVacinas);
 </script>
 
+</body>
 </html>
-
