@@ -71,10 +71,9 @@
 </div>
 
 <script>
-// URL do backend
-const API_URL = "http://localhost:4567"; // Altere para a URL real do backend se necessário
 
-// Função para carregar vacinas do backend
+const API_URL = "http://localhost:4567"; 
+
 async function carregarVacinas() {
     try {
         let response = await fetch(`${API_URL}/vacinas`);
@@ -97,14 +96,14 @@ async function carregarVacinas() {
     }
 }
 
-// Preenchimento automático ao selecionar uma vacina
+
 document.getElementById("vacina").addEventListener("change", function() {
     let selectedOption = this.options[this.selectedIndex];
     document.getElementById("descricao").value = selectedOption.dataset.desc || "";
     document.getElementById("idade").value = selectedOption.dataset.idade || "";
 });
 
-// Capturar e enviar os dados cadastrados para o backend
+
 document.getElementById("formVacina").addEventListener("submit", async function(event) {
     event.preventDefault();
 
@@ -142,7 +141,7 @@ document.getElementById("formVacina").addEventListener("submit", async function(
     }
 });
 
-// Inicializa a busca de vacinas ao carregar a página
+
 document.addEventListener("DOMContentLoaded", carregarVacinas);
 </script>
 
