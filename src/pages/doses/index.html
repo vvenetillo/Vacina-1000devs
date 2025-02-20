@@ -1,14 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Controle de Doses</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #dose-container {
+            width: 60%;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <section id="doses" class="d-none">
-        <h2 class="text-center text-primary mb-4">Doses</h2>
-        <p class="text-center">Controle de doses aplicadas.</p>
-    </section>
+    <div id="dose-container">
+        <h2>Controle de Doses</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Vacina</th>
+                    <th>Dose</th>
+                    <th>Idade Recomendada (meses)</th>
+                </tr>
+            </thead>
+            <tbody id="dose-list"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function carregarDoses() {
+            try {
+                const response = await fetch("http://localhost:8080/api/doses");
+                const doses = await response.json();
+
+                let tabela = "";
+                doses.forEach(dose => {
+                    tabela += `
+                        <tr>
+                            <td>${dose.id}</td>
+                            <td>${dose.id_vacina}</td>
+                            <td>${dose.dose}</td>
+                            <td>${dose.idade_recomendada_aplicacao} meses</td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById("dose-list").innerHTML = tabela;
+            } catch (error) {
+                console.error("Erro ao carregar doses:", error);
+            }
+        }
+
+        // Chama a função ao carregar a página
+        window.onload = carregarDoses;
+    </script>
 </body>
 </html>
