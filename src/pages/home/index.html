@@ -34,10 +34,10 @@
             try {
 
                 const [pacientes, vacinas, imunizacoes, doses] = await Promise.all([
-                    fetch(`${API_URL}/paciente`).then(res => res.json()),
-                    fetch(`${API_URL}/vacina`).then(res => res.json()),
-                    fetch(`${API_URL}/imunizacao`).then(res => res.json()),
-                    fetch(`${API_URL}/doses`).then(res => res.json()),
+                    fetch(`${API_URL}/paciente/consultar`).then(res => res.json()),
+                    fetch(`${API_URL}/vacinas/consultar`).then(res => res.json()),
+                    fetch(`${API_URL}/imunizacao/consultar`).then(res => res.json()),
+                    // fetch(`${API_URL}/doses`).then(res => res.json()),
                 ]);
 
                

@@ -99,18 +99,21 @@
     </table>
 
     <script>
+        let pacientesMap = new Map();
+        let vacinasMap = new Map();
+    
         document.addEventListener("DOMContentLoaded", function () {
             carregarPacientes();
             carregarVacinas();
             carregarImunizacoes();
-
+    
             document.getElementById("form-imunizacao").addEventListener("submit", function (event) {
                 event.preventDefault();
                 registrarImunizacao();
             });
         });
-
-        // Carregar pacientes no select
+    
+        // Carregar pacientes e armazenar em um Map
         function carregarPacientes() {
             fetch("http://localhost:8080/paciente/consultar")
                 .then(response => response.json())
@@ -121,12 +124,14 @@
                         option.value = paciente.id;
                         option.textContent = paciente.nome;
                         selectPaciente.appendChild(option);
+    
+                        pacientesMap.set(paciente.id, paciente.nome); // Guardar nome do paciente
                     });
                 })
                 .catch(error => console.error("Erro ao carregar pacientes:", error));
         }
-
-        // Carregar vacinas no select
+    
+        // Carregar vacinas e armazenar em um Map
         function carregarVacinas() {
             fetch("http://localhost:8080/vacinas/consultar")
                 .then(response => response.json())
@@ -137,24 +142,26 @@
                         option.value = vacina.id;
                         option.textContent = vacina.vacina;
                         selectVacina.appendChild(option);
+    
+                        vacinasMap.set(vacina.id, vacina.vacina); // Guardar nome da vacina
                     });
                 })
                 .catch(error => console.error("Erro ao carregar vacinas:", error));
         }
-
+    
         // Registrar imunização no banco de dados
         function registrarImunizacao() {
-            const pacienteId = document.getElementById("paciente").value;
-            const vacinaId = document.getElementById("vacina").value;
-            const data = document.getElementById("data").value;
-
+            const idPaciente = document.getElementById("paciente").value;
+            const idDose = document.getElementById("vacina").value;
+            const dataAplicacao = document.getElementById("data").value;
+    
             const imunizacao = {
-                pacienteId: parseInt(pacienteId),
-                vacinaId: parseInt(vacinaId),
-                data: data
+                idPaciente: parseInt(idPaciente),
+                idDose: parseInt(idDose),
+                dataAplicacao: dataAplicacao
             };
-
-            fetch("http://localhost:8080/imunizacao/inserir", {
+    
+            fetch("http://localhost:8080/imunizacao/inserir", { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(imunizacao)
@@ -169,7 +176,7 @@
             })
             .catch(error => alert(error.message));
         }
-
+    
         // Carregar lista de imunizações
         function carregarImunizacoes() {
             fetch("http://localhost:8080/imunizacao/consultar")
@@ -177,20 +184,20 @@
                 .then(imunizacoes => {
                     const tabela = document.getElementById("tabela-imunizacoes");
                     tabela.innerHTML = "";
-
+    
                     imunizacoes.forEach(imunizacao => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${imunizacao.id}</td>
-                            <td>${imunizacao.pacienteNome}</td>
-                            <td>${imunizacao.vacinaNome}</td>
-                            <td>${imunizacao.data}</td>
+                            <td>${pacientesMap.get(imunizacao.idPaciente) || "Desconhecido"}</td>
+                            <td>${vacinasMap.get(imunizacao.idDose) || "Desconhecido"}</td>
+                            <td>${imunizacao.dataAplicacao}</td>
                         `;
                         tabela.appendChild(row);
                     });
                 })
                 .catch(error => console.error("Erro ao carregar imunizações:", error));
         }
-    </script>
+    </script>    
 </body>
 </html>
