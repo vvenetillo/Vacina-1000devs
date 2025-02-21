@@ -7,7 +7,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
-    <script src="https://unpkg.com/imask"></script> 
+    <script src="https://unpkg.com/imask"></script>
     <title>Cadastro de Pacientes</title>
   </head>
 
@@ -22,7 +22,9 @@
         <div class="mb-3">
           <label for="cpf" class="form-label">CPF</label>
           <input type="text" class="form-control" id="cpf" required />
-          <div class="text-danger mt-1" id="cpfError" style="display: none;">CPF incompleto!</div>
+          <div class="text-danger mt-1" id="cpfError" style="display: none">
+            CPF incompleto!
+          </div>
         </div>
         <div class="mb-3">
           <label for="sexo" class="form-label">Sexo</label>
@@ -33,57 +35,75 @@
           </select>
         </div>
         <div class="mb-3">
-          <label for="dataNascimento" class="form-label">Data de Nascimento</label>
-          <input type="date" class="form-control" id="dataNascimento" required />
+          <label for="dataNascimento" class="form-label"
+            >Data de Nascimento</label
+          >
+          <input
+            type="date"
+            class="form-control"
+            id="dataNascimento"
+            required
+          />
         </div>
         <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
       </form>
     </section>
 
     <script>
-
       var cpfElement = document.getElementById("cpf");
       var maskOptions = { mask: "000.000.000-00" };
       var maskCPF = IMask(cpfElement, maskOptions);
+      document
+        .getElementById("formPaciente")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
 
-      document.getElementById("formPaciente").addEventListener("submit", async function (event) {
-        event.preventDefault();
+          const cpfElement = document.getElementById("cpf");
+          const cpfValue = cpfElement.value.replace(/\D/g, ""); 
+          const cpfError = document.getElementById("cpfError");
 
-        const cpfValue = cpfElement.value.replace(/\D/g, "");
-        const cpfError = document.getElementById("cpfError");
-
-        if (cpfValue.length !== 11) {
-          cpfError.style.display = "block";
-          return;
-        } else {
-          cpfError.style.display = "none";
-        }
-
-        const paciente = {
-          nome: document.getElementById("nome").value,
-          cpf: cpfValue,
-          sexo: document.getElementById("sexo").value,
-          dataNascimento: document.getElementById("dataNascimento").value,
-        };
-
-        try {
-          const response = await fetch("http://localhost:8080/paciente/inserir", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(paciente),
-          });
-
-          if (!response.ok) {
-            throw new Error("Erro ao cadastrar paciente. Verifique os dados e tente novamente.");
+          if (cpfValue.length !== 11) {
+            cpfError.style.display = "block";
+            return;
+          } else {
+            cpfError.style.display = "none";
           }
 
-          alert("Paciente cadastrado com sucesso!");
-          window.location.href = "../listar-pacientes/index.html";
+          const dataNascimentoInput =
+            document.getElementById("dataNascimento").value;
+          const dataNascimentoFormatada = new Date(dataNascimentoInput)
+            .toISOString()
+            .split("T")[0];
 
-        } catch (error) {
-          alert(error.message);
-        }
-      });
+          const paciente = {
+            nome: document.getElementById("nome").value,
+            cpf: cpfValue, 
+            sexo: document.getElementById("sexo").value,
+            dataNascimento: dataNascimentoFormatada, 
+          };
+
+          try {
+            const response = await fetch(
+              "http://localhost:8080/paciente/inserir",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(paciente),
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(
+                "Erro ao cadastrar paciente. Verifique os dados e tente novamente."
+              );
+            }
+
+            alert("Paciente cadastrado com sucesso!");
+            window.location.href = "../listar-pacientes/index.html";
+          } catch (error) {
+            alert(error.message);
+          }
+        });
     </script>
   </body>
 </html>
