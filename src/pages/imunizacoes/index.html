@@ -72,13 +72,16 @@
 
     <form id="form-imunizacao">
         <label for="paciente">Paciente:</label>
-        <select id="paciente" required></select>
+        <select id="id_paciente" required></select>
 
         <label for="vacina">Vacina:</label>
-        <select id="vacina" required></select>
+        <select id="idDose" required></select>
+
+        <label for="profissional">Profissional:</label>
+        <input id="profissional_aplicador"></input>
 
         <label for="data">Data da Imunização:</label>
-        <input type="date" id="data" required>
+        <input type="date" id="data_aplicacao" required>
 
         <button type="submit">Registrar</button>
     </form>
@@ -90,6 +93,7 @@
                 <th>ID</th>
                 <th>Paciente</th>
                 <th>Vacina</th>
+                <th>Profissional</th>
                 <th>Data</th>
             </tr>
         </thead>
@@ -143,7 +147,7 @@
                         option.textContent = vacina.vacina;
                         selectVacina.appendChild(option);
     
-                        vacinasMap.set(vacina.id, vacina.vacina); // Guardar nome da vacina
+                        vacinasMap.set(vacina.id, vacina.vacina);
                     });
                 })
                 .catch(error => console.error("Erro ao carregar vacinas:", error));
@@ -151,13 +155,15 @@
     
         // Registrar imunização no banco de dados
         function registrarImunizacao() {
-            const idPaciente = document.getElementById("paciente").value;
-            const idDose = document.getElementById("vacina").value;
-            const dataAplicacao = document.getElementById("data").value;
+            const idPaciente = document.getElementById("id_paciente").value;
+            const idDose = document.getElementById("idDose").value;
+            const profissional = document.getElementById("profissional").value;
+            const dataAplicacao = document.getElementById("data_aplicacao").value;
     
             const imunizacao = {
                 idPaciente: parseInt(idPaciente),
                 idDose: parseInt(idDose),
+                profissional: parseInt(profissional),
                 dataAplicacao: dataAplicacao
             };
     
@@ -189,9 +195,10 @@
                         const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${imunizacao.id}</td>
-                            <td>${pacientesMap.get(imunizacao.idPaciente) || "Desconhecido"}</td>
+                            <td>${pacientesMap.get(imunizacao.id_paciente) || "Desconhecido"}</td>
                             <td>${vacinasMap.get(imunizacao.idDose) || "Desconhecido"}</td>
-                            <td>${imunizacao.dataAplicacao}</td>
+                            <td>${profissionalMap.get(imunizacao.profissional_aplicador) || "Desconhecido"}</td>
+                            <td>${imunizacao.data_aplicacao}</td>
                         `;
                         tabela.appendChild(row);
                     });
