@@ -122,14 +122,14 @@
             fetch("http://localhost:8080/paciente/consultar")
                 .then(response => response.json())
                 .then(pacientes => {
-                    const selectPaciente = document.getElementById("paciente");
+                    const selectPaciente = document.getElementById("id_paciente");
                     pacientes.forEach(paciente => {
                         const option = document.createElement("option");
-                        option.value = paciente.id;
+                        option.value = paciente.id_paciente;
                         option.textContent = paciente.nome;
                         selectPaciente.appendChild(option);
     
-                        pacientesMap.set(paciente.id, paciente.nome); // Guardar nome do paciente
+                        pacientesMap.set(paciente.id_paciente, paciente.nome); 
                     });
                 })
                 .catch(error => console.error("Erro ao carregar pacientes:", error));
@@ -140,14 +140,14 @@
             fetch("http://localhost:8080/vacinas/consultar")
                 .then(response => response.json())
                 .then(vacinas => {
-                    const selectVacina = document.getElementById("vacina");
+                    const selectVacina = document.getElementById("idDose");
                     vacinas.forEach(vacina => {
                         const option = document.createElement("option");
-                        option.value = vacina.id;
+                        option.value = vacina.idDose;
                         option.textContent = vacina.vacina;
                         selectVacina.appendChild(option);
     
-                        vacinasMap.set(vacina.id, vacina.vacina);
+                        vacinasMap.set(vacina.idDose, vacina.vacina);
                     });
                 })
                 .catch(error => console.error("Erro ao carregar vacinas:", error));
@@ -157,7 +157,7 @@
         function registrarImunizacao() {
             const idPaciente = document.getElementById("id_paciente").value;
             const idDose = document.getElementById("idDose").value;
-            const profissional = document.getElementById("profissional").value;
+            const profissional = document.getElementById("profissional_aplicador").value;
             const dataAplicacao = document.getElementById("data_aplicacao").value;
     
             const imunizacao = {
