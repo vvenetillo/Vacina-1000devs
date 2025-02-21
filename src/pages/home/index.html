@@ -28,15 +28,15 @@
     </div>
 
     <script>
-        const API_URL = "http://localhost:4567"; 
+        const API_URL = "http://localhost:8080"; 
 
         async function carregarDados() {
             try {
 
                 const [pacientes, vacinas, imunizacoes, doses] = await Promise.all([
-                    fetch(`${API_URL}/pacientes`).then(res => res.json()),
-                    fetch(`${API_URL}/vacinas`).then(res => res.json()),
-                    fetch(`${API_URL}/imunizacoes`).then(res => res.json()),
+                    fetch(`${API_URL}/paciente`).then(res => res.json()),
+                    fetch(`${API_URL}/vacina`).then(res => res.json()),
+                    fetch(`${API_URL}/imunizacao`).then(res => res.json()),
                     fetch(`${API_URL}/doses`).then(res => res.json()),
                 ]);
 

@@ -112,7 +112,7 @@
 
         // Carregar pacientes no select
         function carregarPacientes() {
-            fetch("http://localhost:4567/pacientes")
+            fetch("http://localhost:8080/paciente/consultar")
                 .then(response => response.json())
                 .then(pacientes => {
                     const selectPaciente = document.getElementById("paciente");
@@ -128,14 +128,14 @@
 
         // Carregar vacinas no select
         function carregarVacinas() {
-            fetch("http://localhost:4567/vacinas")
+            fetch("http://localhost:8080/vacinas/consultar")
                 .then(response => response.json())
                 .then(vacinas => {
                     const selectVacina = document.getElementById("vacina");
                     vacinas.forEach(vacina => {
                         const option = document.createElement("option");
                         option.value = vacina.id;
-                        option.textContent = vacina.nome;
+                        option.textContent = vacina.vacina;
                         selectVacina.appendChild(option);
                     });
                 })
@@ -154,7 +154,7 @@
                 data: data
             };
 
-            fetch("http://localhost:4567/imunizacoes", {
+            fetch("http://localhost:8080/imunizacao/inserir", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(imunizacao)
@@ -172,7 +172,7 @@
 
         // Carregar lista de imunizações
         function carregarImunizacoes() {
-            fetch("http://localhost:4567/imunizacoes")
+            fetch("http://localhost:8080/imunizacao/consultar")
                 .then(response => response.json())
                 .then(imunizacoes => {
                     const tabela = document.getElementById("tabela-imunizacoes");

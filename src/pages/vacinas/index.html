@@ -72,11 +72,11 @@
 
 <script>
 
-const API_URL = "http://localhost:4567"; 
+const API_URL = "http://localhost:8080"; 
 
 async function carregarVacinas() {
     try {
-        let response = await fetch(`${API_URL}/vacinas`);
+        let response = await fetch(`${API_URL}/vacinas/consultar`);
         if (!response.ok) throw new Error("Erro ao buscar vacinas");
 
         let vacinas = await response.json();
@@ -85,9 +85,9 @@ async function carregarVacinas() {
         vacinas.forEach(vacina => {
             let option = document.createElement("option");
             option.value = vacina.id;
-            option.textContent = vacina.nome;
+            option.textContent = vacina.vacina;
             option.dataset.desc = vacina.descricao;
-            option.dataset.idade = vacina.idadeMinima || "";
+            option.dataset.idade = vacina.limite_aplicacao || "";
             selectVacina.appendChild(option);
         });
     } catch (error) {
