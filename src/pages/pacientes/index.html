@@ -41,7 +41,7 @@
           <input
             type="date"
             class="form-control"
-            id="dataNascimento"
+            id="data_nascimento"
             required
           />
         </div>
@@ -70,7 +70,7 @@
           }
 
           const dataNascimentoInput =
-            document.getElementById("dataNascimento").value;
+            document.getElementById("data_nascimento").value;
           const dataNascimentoFormatada = new Date(dataNascimentoInput)
             .toISOString()
             .split("T")[0];
@@ -79,7 +79,7 @@
             nome: document.getElementById("nome").value,
             cpf: cpfValue, 
             sexo: document.getElementById("sexo").value,
-            dataNascimento: dataNascimentoFormatada, 
+            data_nascimento: dataNascimentoFormatada, 
           };
 
           try {
