@@ -81,6 +81,7 @@
             sexo: document.getElementById("sexo").value,
             data_nascimento: dataNascimentoFormatada, 
           };
+          console.log(paciente); // Para teste, remova esse console.log() antes de submeter o formulário.
 
           try {
             const response = await fetch(

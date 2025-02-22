@@ -105,28 +105,21 @@
         let pacientesMap = new Map();
         let vacinasMap = new Map();
         let dosesMap = new Map();  // Map para armazenar as doses de cada vacina
-        
+    
         document.addEventListener("DOMContentLoaded", function () {
             carregarPacientes();
             carregarVacinas();
             carregarImunizacoes();
-
-            // Event listener para enviar o formulário de imunização
+    
             document.getElementById("form-imunizacao").addEventListener("submit", function (event) {
                 event.preventDefault();
                 registrarImunizacao();
             });
-
-            // Atualiza vacinas quando paciente mudar
-            document.getElementById("id_paciente").addEventListener("change", carregarVacinas);
-
-            // Atualiza doses quando vacina mudar
-            document.getElementById("id_vacina").addEventListener("change", carregarDosesPorVacina);
         });
-
-        // Função para carregar os pacientes
+    
+          // Função para carregar os pacientes
         function carregarPacientes() {
-            fetch("http://localhost:8080/paciente/consultar")
+            fetch("http://localhost:8080/pacientes/consultar")
                 .then(response => response.json())
                 .then(pacientes => {
                     const selectPaciente = document.getElementById("id_paciente");
@@ -139,9 +132,9 @@
                 })
                 .catch(error => console.error("Erro ao carregar pacientes:", error));
         }
-
-        // Função para carregar as vacinas
-        function carregarVacinas() {
+    
+// Função para carregar as vacinas
+function carregarVacinas() {
             fetch("http://localhost:8080/vacinas/consultar")
                 .then(response => response.json())
                 .then(vacinas => {
@@ -151,7 +144,7 @@
                     vacinas.forEach(vacina => {
                         const option = document.createElement("option");
                         option.value = vacina.id;
-                        option.textContent = vacina.vacina;
+                        option.textContent = vacina.nome;
                         selectVacina.appendChild(option);
                     });
 
@@ -160,28 +153,8 @@
                 })
                 .catch(error => console.error("Erro ao carregar vacinas:", error));
         }
-
-        // Função para carregar as doses com base na vacina selecionada
-        function carregarDosesPorVacina() {
-            const vacinaId = document.getElementById("id_vacina").value;
-            if (!vacinaId) return; // Se não houver vacina selecionada, não faça nada
-
-            fetch(`http://localhost:8080/dose/consultar/vacina/${vacinaId}`)
-                .then(response => response.json())
-                .then(doses => {
-                    const selectDose = document.getElementById("id_dose");
-                    selectDose.innerHTML = ''; // Limpa doses anteriores
-
-                    doses.forEach(dose => {
-                        const option = document.createElement("option");
-                        option.value = dose.id;
-                        option.textContent = dose.dose;
-                        selectDose.appendChild(option);
-                    });
-                })
-                .catch(error => console.error("Erro ao carregar doses:", error));
-        }
-
+    
+      
         // Função para registrar uma nova imunização
         function registrarImunizacao() {
             const idPaciente = document.getElementById("id_paciente").value;
@@ -197,26 +170,31 @@
                 id_paciente,
                 id_vacina,
                 id_dose,
-                data_aplicacao,
+                data_aplicacao, // Certifique-se que a data esteja no formato yyyy-MM-dd
                 fabricante,
                 lote,
                 local_aplicacao,
                 profissional_aplicador
             };
 
-            fetch("http://localhost:8080/imunizacao/inserir", {
+            fetch("http://localhost:8080/imunizacoes/cadastrar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(imunizacao)
             })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    carregarImunizacoes(); // Atualiza a lista de imunizações após cadastro
+                .then(response => {
+                    if (response.ok) {
+                        alert("Imunização registrada com sucesso!");
+                    } else {
+                        alert("Erro ao registrar imunização.");
+                    }
                 })
-                .catch(error => console.error("Erro ao cadastrar imunização:", error));
+                .catch(error => {
+                    console.error("Erro ao registrar imunização:", error);
+                    alert("Erro ao registrar imunização.");
+                });
         }
 
         // Função para carregar todas as imunizações cadastradas
