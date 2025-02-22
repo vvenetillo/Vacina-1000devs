@@ -126,7 +126,7 @@
 
         // Função para carregar os pacientes
         function carregarPacientes() {
-            fetch("http://localhost:8080/pacientes/consultar")
+            fetch("http://localhost:8080/paciente/consultar")
                 .then(response => response.json())
                 .then(pacientes => {
                     const selectPaciente = document.getElementById("id_paciente");
@@ -150,8 +150,8 @@
 
                     vacinas.forEach(vacina => {
                         const option = document.createElement("option");
-                        option.value = vacina.id_vacina;
-                        option.textContent = vacina.nome;
+                        option.value = vacina.id;
+                        option.textContent = vacina.vacina;
                         selectVacina.appendChild(option);
                     });
 
@@ -166,7 +166,7 @@
             const vacinaId = document.getElementById("id_vacina").value;
             if (!vacinaId) return; // Se não houver vacina selecionada, não faça nada
 
-            fetch(`http://localhost:8080/dose/consultar/${vacinaId}`)
+            fetch(`http://localhost:8080/dose/consultar/vacina/${vacinaId}`)
                 .then(response => response.json())
                 .then(doses => {
                     const selectDose = document.getElementById("id_dose");
@@ -204,7 +204,7 @@
                 profissional_aplicador
             };
 
-            fetch("http://localhost:8080/imunizacoes/cadastrar", {
+            fetch("http://localhost:8080/imunizacao/inserir", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
