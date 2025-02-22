@@ -16,7 +16,7 @@
         <div class="row justify-content-center">
           <div class="col-md-3">
             <div class="badge bg-primary p-3 w-100">
-              Pacientes: <span id="contagemPacientes"></span>
+              Pacientes: <span id="contagemPacientes">0</span>
             </div>
           </div>
           <div class="col-md-3">
@@ -38,12 +38,36 @@
 
       async function carregarDados() {
         try {
-          const [pacientes, vacinas, imunizacoes] = await Promise.all([
-            fetch(`${API_URL}/paciente/consultar`).then((res) => res.json()),
-            fetch(`${API_URL}/vacinas/consultar`).then((res) => res.json()),
-            fetch(`${API_URL}/imunizacao/consultar`).then((res) => res.json()),
+          const [pacientesRes, vacinasRes, imunizacoesRes] = await Promise.all([
+            fetch(`${API_URL}/paciente/consultar`),
+            fetch(`${API_URL}/vacinas/consultar`),
+            fetch(`${API_URL}/imunizacao/consultar`),
           ]);
 
+          // Verifique se as respostas são válidas
+          if (!pacientesRes.ok || !vacinasRes.ok || !imunizacoesRes.ok) {
+            throw new Error(`Erro na requisição: ${pacientesRes.status} ${vacinasRes.status} ${imunizacoesRes.status}`);
+          }
+
+          // Processar a resposta de pacientes
+          let pacientes = [];
+          if (pacientesRes.status !== 204) { // 204 = No Content
+            pacientes = await pacientesRes.json();
+          }
+
+          // Processar a resposta de vacinas
+          let vacinas = [];
+          if (vacinasRes.status !== 204) { // 204 = No Content
+            vacinas = await vacinasRes.json();
+          }
+
+          // Processar a resposta de imunizações
+          let imunizacoes = [];
+          if (imunizacoesRes.status !== 204) { // 204 = No Content
+            imunizacoes = await imunizacoesRes.json();
+          }
+
+          // Atualizar a interface do usuário
           document.getElementById("contagemPacientes").textContent =
             pacientes.length || 0;
           document.getElementById("contagemVacinas").textContent =
