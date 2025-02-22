@@ -143,7 +143,7 @@
 
         // Função para carregar os pacientes
         function carregarPacientes() {
-            fetch("http://localhost:8080/pacientes/consultar")
+            fetch("http://localhost:8080/paciente/consultar")
                 .then(response => response.json())
                 .then(pacientes => {
                     const selectPaciente = document.getElementById("id_paciente");
@@ -168,7 +168,7 @@
                     vacinas.forEach(vacina => {
                         const option = document.createElement("option");
                         option.value = vacina.id;
-                        option.textContent = vacina.nome;
+                        option.textContent = vacina.vacina;
                         selectVacina.appendChild(option);
                     });
 
@@ -211,17 +211,18 @@
             const profissionalAplicador = document.getElementById("profissional_aplicador").value;
 
             const imunizacao = {
-                id_paciente,
-                id_vacina,
-                id_dose,
+                id_paciente: parseInt(idPaciente), 
+                id_vacina: parseInt(idVacina),    
+                id_dose: parseInt(idDose),
                 data_aplicacao: formatarData(dataAplicacao), // Aplica a máscara de formatação
                 fabricante,
                 lote,
-                local_aplicacao,
-                profissional_aplicador
+                localAplicacao,
+                profissionalAplicador
             };
+            console.log(imunizacao);
 
-            fetch("http://localhost:8080/imunizacoes/inserir", {
+            fetch("http://localhost:8080/imunizacao/inserir", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -247,7 +248,7 @@
 
         // Função para carregar todas as imunizações cadastradas e renderizar na tabela
         function carregarImunizacoes() {
-            fetch("http://localhost:8080/imunizacoes/consultar")
+            fetch("http://localhost:8080//imunizacao/consultar")
                 .then(response => response.json())
                 .then(imunizacoes => {
                     const tabelaBody = document.querySelector("#tabela-imunizacoes tbody");
