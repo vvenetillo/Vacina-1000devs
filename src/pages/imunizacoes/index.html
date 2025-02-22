@@ -208,31 +208,29 @@
               selectDose.appendChild(option);
             });
           })
-          .catch((error) => console.error("Erro ao carregar doses:", error));
+          .catch((error) => console.error("E rro ao carregar doses:", error));
       }
 
       // Função para registrar uma nova imunização
       function registrarImunizacao() {
-        const idPaciente = document.getElementById("id_paciente").value;
-        const idVacina = document.getElementById("id_vacina").value;
-        const idDose = document.getElementById("id_dose").value;
-        const dataAplicacao = document.getElementById("data_aplicacao").value;
+        const id_paciente = document.getElementById("id_paciente").value;
+        const id_vacina = document.getElementById("id_vacina").value;
+        const id_dose = document.getElementById("id_dose").value;
+        const data_aplicacao = document.getElementById("data_aplicacao").value;
         const fabricante = document.getElementById("fabricante").value;
         const lote = document.getElementById("lote").value;
-        const localAplicacao = document.getElementById("local_aplicacao").value;
-        const profissionalAplicador = document.getElementById(
-          "profissional_aplicador"
-        ).value;
+        const local_aplicacao = document.getElementById("local_aplicacao").value;
+        const profissional_aplicador = document.getElementById("profissional_aplicador").value;
 
         const imunizacao = {
-          id_paciente: parseInt(idPaciente),
-          id_vacina: parseInt(idVacina),
-          id_dose: parseInt(idDose),
-          data_aplicacao: formatarData(dataAplicacao),
+          id_paciente: parseInt(id_paciente),
+          id_vacina: parseInt(id_vacina),
+          id_dose: parseInt(id_dose),
+          data_aplicacao: formatarData(data_aplicacao),
           fabricante,
           lote,
-          localAplicacao,
-          profissionalAplicador,
+          local_aplicacao,
+          profissional_aplicador,
         };
         console.log(imunizacao);
 
