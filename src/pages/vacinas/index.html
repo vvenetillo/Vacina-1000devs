@@ -4,56 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vacinas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <style>
     body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
     }
+
     .container {
+        background: white;
         max-width: 500px;
-        margin: 0 auto;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
     }
+
     h2 {
         text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: 600;
     }
+
     label {
-        font-weight: bold;
+        font-weight: 500;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
     }
+
     input, select, textarea {
         width: 100%;
-        padding: 10px;
-        margin: 5px 0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
     }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #28a745;
+        outline: none;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
     button {
         width: 100%;
-        background: #28a745;
+        background: linear-gradient(135deg, #28a745, #218838);
         color: white;
         border: none;
-        padding: 10px;
-        margin-top: 10px;
+        padding: 12px;
+        margin-top: 20px;
         cursor: pointer;
         font-size: 16px;
-        border-radius: 5px;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: background 0.3s ease, transform 0.2s ease;
     }
+
     button:hover {
-        background: #218838;
+        background: linear-gradient(135deg, #218838, #1e7e34);
+        transform: translateY(-2px);
     }
-    
+
+    button:active {
+        transform: translateY(0);
+    }
+
     #vacina {
-        max-height: 150px; /* Altura máxima */
-        overflow-y: auto;  /* Ativa a barra de rolagem */
+        max-height: 150px;
+        overflow-y: auto;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    #vacina option {
+        padding: 10px;
+        font-size: 14px;
+        transition: background 0.3s ease;
+    }
+
+    #vacina option:hover {
+        background: #f1f1f1;
+    }
+
+    .disabled {
+        background: #f9f9f9;
+        color: #999;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 20px;
+            margin: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 14px;
+        }
     }
 </style>
 <body>
 
 <div class="container">
-    <h2>Cadastro de Vacina</h2>
+    <h2>Consultar Vacina</h2>
     <form id="formVacina">
         <label for="vacina">Selecione uma Vacina:</label>
         <select id="vacina" name="vacina">
@@ -61,22 +139,20 @@
         </select>
 
         <label for="descricao">Descrição:</label>
-        <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição da vacina"></textarea>
+        <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição da vacina" disabled></textarea>
 
         <label for="idade">Idade Mínima Recomendada (meses):</label>
-        <input type="text" id="idade" name="idade" placeholder="Digite a idade mínima">
+        <input type="text" id="idade" name="idade" placeholder="Digite a idade mínima" disabled>
 
         <label for="categoria">Categoria:</label>
         <select id="categoria" name="categoria">
             <option value="CRIANÇA">Criança</option>
         </select>
 
-        <button type="submit">Cadastrar</button>
     </form>
 </div>
 
 <script>
-
 const API_URL = "http://localhost:8080"; 
 
 async function carregarVacinas() {
@@ -101,13 +177,11 @@ async function carregarVacinas() {
     }
 }
 
-
 document.getElementById("vacina").addEventListener("change", function() {
     let selectedOption = this.options[this.selectedIndex];
     document.getElementById("descricao").value = selectedOption.dataset.desc || "";
     document.getElementById("idade").value = selectedOption.dataset.idade || "";
 });
-
 
 document.getElementById("formVacina").addEventListener("submit", async function(event) {
     event.preventDefault();
@@ -145,7 +219,6 @@ document.getElementById("formVacina").addEventListener("submit", async function(
         alert("Erro ao cadastrar vacina.");
     }
 });
-
 
 document.addEventListener("DOMContentLoaded", carregarVacinas);
 </script>
