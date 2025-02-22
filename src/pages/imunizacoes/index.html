@@ -262,7 +262,44 @@
         return `${year}-${month}-${day}`;
       }
 
-      // Função para carregar todas as imunizações cadastradas e renderizar na tabela
+      class Imunizacao {
+        constructor(
+          nome,
+          vacina,
+          dose,
+          dataAplicacao,
+          fabricante,
+          lote,
+          localAplicacao,
+          profissionalAplicador
+        ) {
+          this.nome = nome;
+          this.vacina = vacina;
+          this.dose = dose;
+          this.dataAplicacao = dataAplicacao;
+          this.fabricante = fabricante;
+          this.lote = lote;
+          this.localAplicacao = localAplicacao;
+          this.profissionalAplicador = profissionalAplicador;
+        }
+
+        // Método para renderizar uma linha na tabela
+        renderRow() {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${this.nome || "N/A"}</td>
+            <td>${this.vacina || "N/A"}</td>
+            <td>${this.dose || "N/A"}</td>
+            <td>${this.dataAplicacao}</td>
+            <td>${this.fabricante}</td>
+            <td>${this.lote}</td>
+            <td>${this.localAplicacao}</td>
+            <td>${this.profissionalAplicador}</td>
+        `;
+          return row;
+        }
+      }
+
       function carregarImunizacoes() {
         fetch("http://localhost:8080/imunizacao/consultar")
           .then((response) => response.json())
@@ -273,18 +310,18 @@
             tabelaBody.innerHTML = ""; // Limpa a tabela antes de renderizar
 
             imunizacoes.forEach((imunizacao) => {
-              const row = document.createElement("tr");
-              row.innerHTML = `
-                            <td>${imunizacao.nome || "N/A"}</td>
-                            <td>${imunizacao.vacina || "N/A"}</td>
-                            <td>${imunizacao.dose || "N/A"}</td>
-                            <td>${imunizacao.data_aplicacao}</td>
-                            <td>${imunizacao.fabricante}</td>
-                            <td>${imunizacao.lote}</td>
-                            <td>${imunizacao.local_aplicacao}</td>
-                            <td>${imunizacao.profissional_aplicador}</td>
-                        `;
-              tabelaBody.appendChild(row);
+              const imunizacaoObj = new Imunizacao(
+                imunizacao.nome,
+                imunizacao.vacina,
+                imunizacao.dose,
+                imunizacao.data_aplicacao,
+                imunizacao.fabricante,
+                imunizacao.lote,
+                imunizacao.local_aplicacao,
+                imunizacao.profissional_aplicador
+              );
+
+              tabelaBody.appendChild(imunizacaoObj.renderRow());
             });
           })
           .catch((error) =>
