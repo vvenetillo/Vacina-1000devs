@@ -3,12 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Vacinas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        background: white;
+        max-width: 500px;
+        width: 100%;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    label {
+        font-weight: 500;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #28a745;
+        outline: none;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    button {
+        width: 100%;
+        background: linear-gradient(135deg, #28a745, #218838);
+        color: white;
+        border: none;
+        padding: 12px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #218838, #1e7e34);
+        transform: translateY(-2px);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    #vacina {
+        max-height: 150px;
+        overflow-y: auto;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    #vacina option {
+        padding: 10px;
+        font-size: 14px;
+        transition: background 0.3s ease;
+    }
+
+    #vacina option:hover {
+        background: #f1f1f1;
+    }
+
+    .disabled {
+        background: #f9f9f9;
+        color: #999;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 20px;
+            margin: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 14px;
+        }
+    }
+</style>
 <body>
-    <section id="cadastroVacinas" class="d-none">
-        <h2 class="text-center text-primary mb-4">Cadastro de Vacinas</h2>
-        <p class="text-center">Formulário para cadastrar vacinas.</p>
-    </section>
+
+<div class="container">
+    <h2>Consultar Vacina</h2>
+    <form id="formVacina">
+        <label for="vacina">Selecione uma Vacina:</label>
+        <select id="vacina" name="vacina">
+            <option value="">-- Selecione --</option>
+        </select>
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição da vacina" disabled></textarea>
+
+        <label for="idade">Idade Mínima Recomendada (meses):</label>
+        <input type="text" id="idade" name="idade" placeholder="Digite a idade mínima" disabled>
+
+        <label for="categoria">Categoria:</label>
+        <select id="categoria" name="categoria">
+            <option value="CRIANÇA">Criança</option>
+        </select>
+
+    </form>
+</div>
+
+<script>
+const API_URL = "http://localhost:8080"; 
+
+async function carregarVacinas() {
+    try {
+        let response = await fetch(`${API_URL}/vacinas/consultar`);
+        if (!response.ok) throw new Error("Erro ao buscar vacinas");
+
+        let vacinas = await response.json();
+        let selectVacina = document.getElementById("vacina");
+
+        vacinas.forEach(vacina => {
+            let option = document.createElement("option");
+            option.value = vacina.id;
+            option.textContent = vacina.vacina;
+            option.dataset.desc = vacina.descricao;
+            option.dataset.idade = vacina.limite_aplicacao || "";
+            selectVacina.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Erro ao carregar vacinas:", error);
+        alert("Erro ao carregar vacinas do banco de dados.");
+    }
+}
+
+document.getElementById("vacina").addEventListener("change", function() {
+    let selectedOption = this.options[this.selectedIndex];
+    document.getElementById("descricao").value = selectedOption.dataset.desc || "";
+    document.getElementById("idade").value = selectedOption.dataset.idade || "";
+});
+
+document.getElementById("formVacina").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    let vacinaId = document.getElementById("vacina").value;
+    let descricao = document.getElementById("descricao").value;
+    let idade = document.getElementById("idade").value;
+    let categoria = document.getElementById("categoria").value;
+
+    if (!vacinaId) {
+        alert("Por favor, selecione uma vacina.");
+        return;
+    }
+
+    let vacinaData = {
+        vacinaId,
+        descricao,
+        idade: idade || null,
+        categoria
+    };
+
+    try {
+        let response = await fetch(`${API_URL}/vacinas/cadastrar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(vacinaData)
+        });
+
+        if (!response.ok) throw new Error("Erro ao cadastrar vacina");
+
+        alert("✅ Vacina cadastrada com sucesso!");
+        document.getElementById("formVacina").reset();
+    } catch (error) {
+        console.error("Erro ao cadastrar vacina:", error);
+        alert("Erro ao cadastrar vacina.");
+    }
+});
+
+document.addEventListener("DOMContentLoaded", carregarVacinas);
+</script>
+
 </body>
 </html>
