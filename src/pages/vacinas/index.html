@@ -17,6 +17,18 @@
         min-height: 100vh;
     }
 
+    #zegota {
+        max-width: 85%;
+    }
+
+    #container2{
+      display: grid;
+    }
+    @media (max-width: 600px) {
+        #container2 {
+            grid-template-columns: 1fr;
+        }
+    }
     .container {
         background: white;
         max-width: 500px;
@@ -128,7 +140,10 @@
     }
 </style>
 <body>
-
+    <div id="container2">
+       
+        <img src="./img/zegota.png" alt="" id="zegota">
+    </div>
 <div class="container">
     <h2>Consultar Vacina</h2>
     <form id="formVacina">
@@ -138,14 +153,14 @@
         </select>
 
         <label for="descricao">Descrição:</label>
-        <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição da vacina" disabled></textarea>
+        <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição da vacina" readonly></textarea>
 
         <label for="idade">Idade Mínima Recomendada (meses):</label>
-        <input type="text" id="idade" name="idade" placeholder="Digite a idade mínima" disabled>
+        <input type="text" id="limiteAplicacao" name="idade" readonly>
 
         <label for="categoria">Categoria:</label>
-        <select id="categoria" name="categoria">
-            <option value="CRIANÇA">Criança</option>
+        <select id="categoria" name="categoria" >
+            <option value="CRIANÇA" >Criança</option>
         </select>
 
     </form>
@@ -167,7 +182,7 @@ async function carregarVacinas() {
             option.value = vacina.id;
             option.textContent = vacina.vacina;
             option.dataset.desc = vacina.descricao;
-            option.dataset.idade = vacina.limite_aplicacao || "";
+            option.dataset.idade = vacina.limiteAplicacao || "";
             selectVacina.appendChild(option);
         });
     } catch (error) {
@@ -178,8 +193,9 @@ async function carregarVacinas() {
 
 document.getElementById("vacina").addEventListener("change", function() {
     let selectedOption = this.options[this.selectedIndex];
+
     document.getElementById("descricao").value = selectedOption.dataset.desc || "";
-    document.getElementById("idade").value = selectedOption.dataset.idade || "";
+    document.getElementById("limiteAplicacao").value = selectedOption.dataset.idade || "Não há limite de idade";
 });
 
 document.getElementById("formVacina").addEventListener("submit", async function(event) {
@@ -187,7 +203,7 @@ document.getElementById("formVacina").addEventListener("submit", async function(
 
     let vacinaId = document.getElementById("vacina").value;
     let descricao = document.getElementById("descricao").value;
-    let idade = document.getElementById("idade").value;
+    let idade = document.getElementById("limiteAplicacao").value;
     let categoria = document.getElementById("categoria").value;
 
     if (!vacinaId) {
@@ -201,22 +217,25 @@ document.getElementById("formVacina").addEventListener("submit", async function(
         idade: idade || null,
         categoria
     };
+    
 
     try {
         let response = await fetch(`${API_URL}/vacinas/cadastrar`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(vacinaData)
+            
         });
-
+        
         if (!response.ok) throw new Error("Erro ao cadastrar vacina");
 
         alert("✅ Vacina cadastrada com sucesso!");
         document.getElementById("formVacina").reset();
     } catch (error) {
-        console.error("Erro ao cadastrar vacina:", error);
+        console.error("Erro ao consultar vacina:", error);
         alert("Erro ao cadastrar vacina.");
     }
+   
 });
 
 document.addEventListener("DOMContentLoaded", carregarVacinas);
