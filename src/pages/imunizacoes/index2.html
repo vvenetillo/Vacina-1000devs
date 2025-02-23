@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imunizações Registradas</title>
     <style>
+        
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -39,7 +40,7 @@
         }
 
         th {
-            background-color: #0501ff;
+            background-color: #127fe4;
             color: white;
             font-weight: bold;
         }
@@ -87,7 +88,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- As linhas serão renderizadas aqui dinamicamente -->
+
         </tbody>
     </table>
 
@@ -144,15 +145,15 @@
 
         function formatarData(data) {
             if (!data || typeof data !== 'object') {
-                return ""; // Retorna vazio se a data for inválida ou não for um objeto
+                return ""; 
             }
 
             // Extrai dia, mês e ano do objeto
-            const dia = String(data.dayOfMonth).padStart(2, '0'); // Garante 2 dígitos
-            const mes = String(data.monthValue).padStart(2, '0'); // Mês já é um número (1-12)
+            const dia = String(data.dayOfMonth).padStart(2, '0'); 
+            const mes = String(data.monthValue).padStart(2, '0'); 
             const ano = data.year;
 
-            // Retorna a data no formato dd/MM/yyyy
+           
             return `${dia}/${mes}/${ano}`;
         }
     </script>
