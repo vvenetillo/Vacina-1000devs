@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +32,8 @@
             overflow: hidden;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px 15px;
             text-align: left;
         }
@@ -61,12 +63,14 @@
                 white-space: nowrap;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 8px;
             }
         }
     </style>
 </head>
+
 <body>
     <h2>Imunizações Registradas</h2>
     <table id="tabela-imunizacoes">
@@ -93,29 +97,65 @@
         });
 
         function carregarImunizacoes() {
-            fetch("http://localhost:8080/imunizacao/consultar")
-                .then((response) => response.json())
+            fetch("http://localhost:8080/imunizacao/consultar/formatada")
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
                 .then((imunizacoes) => {
                     const tabelaBody = document.querySelector("#tabela-imunizacoes tbody");
                     tabelaBody.innerHTML = ""; // Limpa a tabela antes de renderizar
 
-                    imunizacoes.forEach((imunizacao) => {
+                    if (imunizacoes.length === 0) {
+                        // Se não houver imunizações, exibe uma mensagem
                         const row = document.createElement("tr");
                         row.innerHTML = `
-                            <td>${imunizacao.nome || "N/A"}</td>
-                            <td>${imunizacao.vacina || "N/A"}</td>
-                            <td>${imunizacao.dose || "N/A"}</td>
-                            <td>${imunizacao.data_aplicacao}</td>
-                            <td>${imunizacao.fabricante}</td>
-                            <td>${imunizacao.lote}</td>
-                            <td>${imunizacao.local_aplicacao}</td>
-                            <td>${imunizacao.profissional_aplicador}</td>
+                            <td colspan="8" style="text-align: center;">Nenhuma imunização encontrada.</td>
                         `;
                         tabelaBody.appendChild(row);
-                    });
+                    } else {
+                        // Preenche a tabela com os dados das imunizações
+                        imunizacoes.forEach((imunizacao) => {
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                                <td>${imunizacao.nomePaciente || " "}</td>
+                                <td>${imunizacao.nomeVacina || " "}</td>
+                                <td>${imunizacao.dose || " "}</td>
+                                <td>${formatarData(imunizacao.dataAplicacao) || " "}</td> <!-- Formata a data -->
+                                <td>${imunizacao.fabricante || " "}</td>
+                                <td>${imunizacao.lote || " "}</td>
+                                <td>${imunizacao.localAplicacao || ""}</td>
+                                <td>${imunizacao.profissionalAplicador || " "}</td>
+                            `;
+                            tabelaBody.appendChild(row);
+                        });
+                    }
                 })
-                .catch((error) => console.error("Erro ao carregar imunizações:", error));
+                .catch((error) => {
+                    console.error("Erro ao carregar imunizações:", error);
+                    alert("Erro ao carregar as imunizações. Verifique o console para mais detalhes.");
+                });
+        }
+
+
+
+
+        function formatarData(data) {
+            if (!data || typeof data !== 'object') {
+                return ""; // Retorna vazio se a data for inválida ou não for um objeto
+            }
+
+            // Extrai dia, mês e ano do objeto
+            const dia = String(data.dayOfMonth).padStart(2, '0'); // Garante 2 dígitos
+            const mes = String(data.monthValue).padStart(2, '0'); // Mês já é um número (1-12)
+            const ano = data.year;
+
+            // Retorna a data no formato dd/MM/yyyy
+            return `${dia}/${mes}/${ano}`;
         }
     </script>
 </body>
+
 </html>

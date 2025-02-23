@@ -1,239 +1,245 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registro de Imunizações</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-      }
 
-      h1,
-      h2 {
-        color: #333;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Imunizações</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
 
-      form {
-        width: 80%;
-        margin: auto;
-        padding: 15px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        gap: 20px;
-      }
+    h1,
+    h2 {
+      color: #333;
+    }
 
-      label {
-        display: block;
-        margin-top: 10px;
-      }
+    form {
+      width: 80%;
+      margin: auto;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      gap: 20px;
+    }
 
-      input,
-      select,
-      button {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-      }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
 
-      button {
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        cursor: pointer;
-        grid-column: span 3; /* Faz o botão ocupar as 3 colunas */
-      }
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
 
-      button:hover {
-        background-color: #45a049;
-      }
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      grid-column: span 3;
+      /* Faz o botão ocupar as 3 colunas */
+    }
 
-      table {
-        width: 80%;
-        margin: 20px auto;
-        border-collapse: collapse;
-        background: white;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-      }
+    button:hover {
+      background-color: #45a049;
+    }
 
-      th,
-      td {
-        padding: 10px;
-        border: 1px solid #ddd;
-      }
+    table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
 
-      th {
-        background-color: #4caf50;
-        color: white;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Registro de Imunizações</h1>
+    th,
+    td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
 
-    <form id="form-imunizacao">
-      <label for="id_paciente">Paciente</label>
-      <select id="id_paciente"></select>
+    th {
+      background-color: #4caf50;
+      color: white;
+    }
+  </style>
+</head>
 
-      <label for="id_vacina">Vacina</label>
-      <select id="id_vacina"></select>
+<body>
+  <h1>Registro de Imunizações</h1>
 
-      <label for="id_dose">Dose</label>
-      <select id="id_dose"></select>
+  <form id="form-imunizacao">
+    <label for="id_paciente">Paciente</label>
+    <select id="id_paciente"></select>
 
-      <label for="data_aplicacao">Data de Aplicação</label>
-      <input type="date" id="data_aplicacao" required />
+    <label for="id_vacina">Vacina</label>
+    <select id="id_vacina"></select>
 
-      <label for="fabricante">Fabricante</label>
-      <input type="text" id="fabricante" required />
+    <label for="id_dose">Dose</label>
+    <select id="id_dose"></select>
 
-      <label for="lote">Lote</label>
-      <input type="text" id="lote" required />
+    <label for="data_aplicacao">Data de Aplicação</label>
+    <input type="date" id="data_aplicacao" required />
 
-      <label for="local_aplicacao">Local de Aplicação</label>
-      <input type="text" id="local_aplicacao" required />
+    <label for="fabricante">Fabricante</label>
+    <input type="text" id="fabricante" required />
 
-      <label for="profissional_aplicador">Profissional Aplicador</label>
-      <input type="text" id="profissional_aplicador" required />
+    <label for="lote">Lote</label>
+    <input type="text" id="lote" required />
 
-      <button type="submit">Registrar Imunização</button>
-    </form>
+    <label for="local_aplicacao">Local de Aplicação</label>
+    <input type="text" id="local_aplicacao" required />
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        carregarPacientes();
-        carregarVacinas();
+    <label for="profissional_aplicador">Profissional Aplicador</label>
+    <input type="text" id="profissional_aplicador" required />
 
-        // Event listener para enviar o formulário de imunização
-        document
-          .getElementById("form-imunizacao")
-          .addEventListener("submit", function (event) {
-            event.preventDefault();
-            registrarImunizacao();
+    <button type="submit">Registrar Imunização</button>
+  </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      carregarPacientes();
+      carregarVacinas();
+
+      // Event listener para enviar o formulário de imunização
+      document
+        .getElementById("form-imunizacao")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          registrarImunizacao();
+        });
+
+      // Atualiza vacinas quando paciente mudar
+      document
+        .getElementById("id_paciente")
+        .addEventListener("change", carregarVacinas);
+
+      // Atualiza doses quando vacina mudar
+      document
+        .getElementById("id_vacina")
+        .addEventListener("change", carregarDosesPorVacina);
+    });
+
+    // Função para carregar os pacientes
+    function carregarPacientes() {
+      fetch("http://localhost:8080/paciente/consultar")
+        .then((response) => response.json())
+        .then((pacientes) => {
+          const selectPaciente = document.getElementById("id_paciente");
+          pacientes.forEach((paciente) => {
+            const option = document.createElement("option");
+            option.value = paciente.id;
+            option.textContent = paciente.nome;
+            selectPaciente.appendChild(option);
+          });
+        })
+        .catch((error) =>
+          console.error("Erro ao carregar pacientes:", error)
+        );
+    }
+
+    // Função para carregar as vacinas
+    function carregarVacinas() {
+      fetch("http://localhost:8080/vacinas/consultar")
+        .then((response) => response.json())
+        .then((vacinas) => {
+          const selectVacina = document.getElementById("id_vacina");
+          selectVacina.innerHTML = ""; // Limpa vacinas anteriores
+
+          vacinas.forEach((vacina) => {
+            const option = document.createElement("option");
+            option.value = vacina.id;
+            option.textContent = vacina.vacina;
+            selectVacina.appendChild(option);
           });
 
-        // Atualiza vacinas quando paciente mudar
-        document
-          .getElementById("id_paciente")
-          .addEventListener("change", carregarVacinas);
-
-        // Atualiza doses quando vacina mudar
-        document
-          .getElementById("id_vacina")
-          .addEventListener("change", carregarDosesPorVacina);
-      });
-
-      // Função para carregar os pacientes
-      function carregarPacientes() {
-        fetch("http://localhost:8080/paciente/consultar")
-          .then((response) => response.json())
-          .then((pacientes) => {
-            const selectPaciente = document.getElementById("id_paciente");
-            pacientes.forEach((paciente) => {
-              const option = document.createElement("option");
-              option.value = paciente.id;
-              option.textContent = paciente.nome;
-              selectPaciente.appendChild(option);
-            });
-          })
-          .catch((error) =>
-            console.error("Erro ao carregar pacientes:", error)
-          );
-      }
-
-      // Função para carregar as vacinas
-      function carregarVacinas() {
-        fetch("http://localhost:8080/vacinas/consultar")
-          .then((response) => response.json())
-          .then((vacinas) => {
-            const selectVacina = document.getElementById("id_vacina");
-            selectVacina.innerHTML = ""; // Limpa vacinas anteriores
-
-            vacinas.forEach((vacina) => {
-              const option = document.createElement("option");
-              option.value = vacina.id;
-              option.textContent = vacina.vacina;
-              selectVacina.appendChild(option);
-            });
-
-            // Carregar doses quando vacinas são carregadas
-            carregarDosesPorVacina();
-          })
-          .catch((error) => console.error("Erro ao carregar vacinas:", error));
-      }
-
-      // Função para carregar as doses com base na vacina selecionada
-      function carregarDosesPorVacina() {
-        const vacinaId = document.getElementById("id_vacina").value;
-        if (!vacinaId) return; // Se não houver vacina selecionada, não faça nada
-
-        fetch(`http://localhost:8080/dose/consultar/vacina/${vacinaId}`)
-          .then((response) => response.json())
-          .then((doses) => {
-            const selectDose = document.getElementById("id_dose");
-            selectDose.innerHTML = ""; // Limpa doses anteriores
-
-            doses.forEach((dose) => {
-              const option = document.createElement("option");
-              option.value = dose.id;
-              option.textContent = dose.dose;
-              selectDose.appendChild(option);
-            });
-          })
-          .catch((error) => console.error("Erro ao carregar doses:", error));
-      }
-
-      // Função para registrar uma nova imunização
-      function registrarImunizacao() {
-        const id_paciente = document.getElementById("id_paciente").value;
-        const id_vacina = document.getElementById("id_vacina").value;
-        const id_dose = document.getElementById("id_dose").value;
-        const data_aplicacao = document.getElementById("data_aplicacao").value;
-        const fabricante = document.getElementById("fabricante").value;
-        const lote = document.getElementById("lote").value;
-        const local_aplicacao = document.getElementById("local_aplicacao").value;
-        const profissional_aplicador = document.getElementById("profissional_aplicador").value;
-
-        const imunizacao = {
-          id_paciente: parseInt(id_paciente),
-          id_vacina: parseInt(id_vacina),
-          id_dose: parseInt(id_dose),
-          data_aplicacao: formatarData(data_aplicacao),
-          fabricante,
-          lote,
-          local_aplicacao,
-          profissional_aplicador,
-        };
-
-        fetch("http://localhost:8080/imunizacao/inserir", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(imunizacao),
+          // Carregar doses quando vacinas são carregadas
+          carregarDosesPorVacina();
         })
-          .then((response) => response.json())
-          .then((data) => {
-            alert(data.message);
-            window.location.href = "index2.html"; // Redireciona para a lista de imunizações
-          })
-          .catch((error) =>
-            console.error("Erro ao cadastrar imunização:", error)
-          );
-      }
+        .catch((error) => console.error("Erro ao carregar vacinas:", error));
+    }
 
-      // Função para formatar a data no padrão yyyy-MM-dd
-      function formatarData(data) {
-        const date = new Date(data);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
-    </script>
-  </body>
+    // Função para carregar as doses com base na vacina selecionada
+    function carregarDosesPorVacina() {
+      const vacinaId = document.getElementById("id_vacina").value;
+      if (!vacinaId) return; // Se não houver vacina selecionada, não faça nada
+
+      fetch(`http://localhost:8080/dose/consultar/vacina/${vacinaId}`)
+        .then((response) => response.json())
+        .then((doses) => {
+          const selectDose = document.getElementById("id_dose");
+          selectDose.innerHTML = ""; // Limpa doses anteriores
+
+          doses.forEach((dose) => {
+            const option = document.createElement("option");
+            option.value = dose.id;
+            option.textContent = dose.dose;
+            selectDose.appendChild(option);
+          });
+        })
+        .catch((error) => console.error("Erro ao carregar doses:", error));
+    }
+
+    // Função para registrar uma nova imunização
+    function registrarImunizacao() {
+      const id_paciente = document.getElementById("id_paciente").value;
+      const id_vacina = document.getElementById("id_vacina").value;
+      const id_dose = document.getElementById("id_dose").value;
+      const data_aplicacao = document.getElementById("data_aplicacao").value;
+      const fabricante = document.getElementById("fabricante").value;
+      const lote = document.getElementById("lote").value;
+      const local_aplicacao = document.getElementById("local_aplicacao").value;
+      const profissional_aplicador = document.getElementById("profissional_aplicador").value;
+
+      const imunizacao = {
+        id_paciente: parseInt(id_paciente),
+        id_vacina: parseInt(id_vacina),
+        id_dose: parseInt(id_dose),
+        data_aplicacao: formatarData(data_aplicacao),
+        fabricante,
+        lote,
+        local_aplicacao,
+        profissional_aplicador,
+      };
+
+      fetch("http://localhost:8080/imunizacao/inserir", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(imunizacao),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          alert(data.message);
+          // Aguarda 1 segundo antes de redirecionar
+          setTimeout(() => {
+            window.location.href = "index2.html";
+          }, 1000);
+        })
+        .catch((error) => console.error("Erro ao cadastrar imunização:", error));
+    }
+
+    // Função para formatar a data no padrão yyyy-MM-dd
+    function formatarData(data) {
+      const date = new Date(data);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Mês é zero-based
+      const day = String(date.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    }
+  </script>
+</body>
+
 </html>
